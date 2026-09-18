@@ -1,10 +1,11 @@
-      - name: Build Debug APK
-        run: |
-          gradle :app:assembleDebug --console=plain 2>&1 | tee build.log
-          STATUS=${PIPESTATUS[0]}
-          echo "========== IMPORTANT ERRORS =========="
-          grep -i -E "error:|FAILURE:|What went wrong|Execution failed|Caused by:|Unresolved reference|e: file" build.log | tail -80 || true
-          exit $STATUS
+name: Build Android APK - Debug
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -27,11 +28,18 @@ jobs:
           echo "=== ROOT ==="
           ls -la
           echo "=== APP ==="
-          find app -maxdepth 4 -type f | sort
+          find app -maxdepth 5 -type f | sort
 
       - name: Build Debug APK
         run: |
-          gradle :app:assembleDebug --stacktrace --info --console=plain
+          set +e
+          gradle :app:assembleDebug --console=plain 2>&1 | tee build.log
+          STATUS=${PIPESTATUS[0]}
+          echo ""
+          echo "========== IMPORTANT ERRORS =========="
+          grep -i -E "error:|FAILURE:|What went wrong|Execution failed|Caused by:|Unresolved reference|e: file|Exception" build.log | tail -100 || true
+          echo "======================================"
+          exit $STATUS
 
       - name: Upload APK
         if: success()

@@ -1,11 +1,10 @@
-name: Build Android APK - Debug
-
-on:
-  workflow_dispatch:
-  push:
-    branches:
-      - main
-
+      - name: Build Debug APK
+        run: |
+          gradle :app:assembleDebug --console=plain 2>&1 | tee build.log
+          STATUS=${PIPESTATUS[0]}
+          echo "========== IMPORTANT ERRORS =========="
+          grep -i -E "error:|FAILURE:|What went wrong|Execution failed|Caused by:|Unresolved reference|e: file" build.log | tail -80 || true
+          exit $STATUS
 jobs:
   build:
     runs-on: ubuntu-latest

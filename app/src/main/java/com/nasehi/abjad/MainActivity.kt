@@ -1,5 +1,6 @@
 package com.nasehi.abjad
-
+import androidx.compose.ui.graphics.Color
+import kotlinx.coroutines.delay
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -17,7 +18,107 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+@Composable
+fun AbjadApplication() {
 
+    var showSplash by remember { mutableStateOf(true) }
+
+    LaunchedEffect(Unit) {
+        delay(2000)
+        showSplash = false
+    }
+
+    if (showSplash) {
+        SplashScreen()
+    } else {
+        AbjadApp()
+    }
+}
+
+@Composable
+fun SplashScreen() {
+
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = Color(0xFF172554)
+    ) {
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(30.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+
+            Text(
+                text = "✦",
+                fontSize = 70.sp,
+                color = Color(0xFFFFD54F)
+            )
+
+            Spacer(modifier = Modifier.height(22.dp))
+
+            Text(
+                text = "محاسبات ابجد و ارتعاش اسم",
+                fontSize = 27.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+                color = Color.White
+            )
+
+            Spacer(modifier = Modifier.height(35.dp))
+
+            Text(
+                text = "بر اساس آموزش‌های",
+                fontSize = 16.sp,
+                color = Color(0xFFD1D5DB)
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = "دکتر لیدا هیزجی",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFFFFD54F)
+            )
+
+            Spacer(modifier = Modifier.height(45.dp))
+
+            HorizontalDivider(
+                modifier = Modifier.fillMaxWidth(0.65f),
+                color = Color(0x55FFFFFF)
+            )
+
+            Spacer(modifier = Modifier.height(30.dp))
+
+            Text(
+                text = "طراحی و توسعه نرم‌افزار",
+                fontSize = 15.sp,
+                color = Color(0xFFD1D5DB)
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = "دکتر محمدحسن ناصحی",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White
+            )
+
+            Spacer(modifier = Modifier.height(6.dp))
+
+            Text(
+                text = "DR.NASEHI",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFFFFD54F)
+            )
+        }
+    }
+}
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +128,7 @@ class MainActivity : ComponentActivity() {
                 CompositionLocalProvider(
                     LocalLayoutDirection provides LayoutDirection.Rtl
                 ) {
-                    AbjadApp()
+                    AbjadApplication()
                 }
             }
         }
@@ -96,7 +197,7 @@ fun calculateAbjad(text: String): Int {
 fun categoryByFour(number: Int): String {
     return when (number % 4) {
         0 -> "اشرافی"
-        3 -> "اشرافی"
+        3 -> "عرفانی"
         2 -> "کم‌درآمد"
         1 -> "حادثه"
         else -> "-"
